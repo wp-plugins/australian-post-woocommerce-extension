@@ -1,6 +1,6 @@
 <?php
 /* @wordpress-plugin
- * Plugin Name:       WooCommerce Australian Post Shipping Method
+ * Plugin Name:       Australia Post WooCommerce Shipping Method
  * Plugin URI:        http://waseem-senjer.com/
  * Description:       WooCommerce Australian Post Shipping Method.
  * Version:           1.0.0

@@ -1,4 +1,4 @@
-=== Australian Post WooCommerce Extension ===
+=== Australia Post WooCommerce Extension ===
 Contributors: waseem_senjer
 Donate link: http://www.waseem-senjer.com
 Tags: woocommerce,shipping, woocommerce extension, australia, australian post
