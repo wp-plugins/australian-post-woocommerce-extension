@@ -138,7 +138,7 @@ class WC_Australian_Post_Shipping_Method extends WC_Shipping_Method{
 			<h3>Notes: </h3>
 			<ol>
 				<li><a target="_blank" href="http://auspost.com.au/parcels-mail/size-and-weight-guidelines.html">Weight and Size Guidlines </a>from Australia Post.</li>
-				<li>Do you ship internationally? Do you charge handling fees? <a href="http://waseem-senjer.com/product/australia-post-woocommerce-extension-pro/" target="_blank">Get the PRO</a> version from this plugin with other cool features for <span style="color:green;">only 9$</span> </li>
+				<li>Do you ship internationally? Do you charge handling fees? <a href="http://waseem-senjer.com/product/australian-post-woocommerce-extension-pro/" target="_blank">Get the PRO</a> version from this plugin with other cool features for <span style="color:green;">only 9$</span> </li>
 				<li>If you encountered any problem with the plugin, please do not hesitate <a target="_blank" href="http://waseem-senjer.com/submit-ticket/">submitting a support ticket</a>.</li>
 				<li>If you like the plugin please leave me a <a target="_blank" href="https://wordpress.org/support/view/plugin-reviews/australian-post-woocommerce-extension?filter=5#postform">★★★★★</a> rating. A huge thank you from me in advance!</li>
 				
@@ -234,14 +234,28 @@ class WC_Australian_Post_Shipping_Method extends WC_Shipping_Method{
 
 					$aus_response = json_decode(wp_remote_retrieve_body($response));
 					
+
+					
+					if(!$aus_response->error){
+						
+					
 						$this->add_rate(array(
 								'id' => $service_key,
 								'label' => 'Australia ' . $aus_response->postage_result->service.' ('.$aus_response->postage_result->delivery_time.')', //( '.$service->delivery_time.' )
 								'cost' =>  $aus_response->postage_result->total_cost , 
 								
-							)); 
+						)); 
+					}else{
+
+							wc_add_notice($aus_response->error->errorMessage,'error');
+							return;
+						
+						 
+					}
 					
 			endforeach;
+
+
 
 
 	}
