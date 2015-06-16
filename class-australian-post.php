@@ -34,6 +34,11 @@ class WC_Australian_Post_Shipping_Method extends WC_Shipping_Method{
 		$this->default_width = $this->get_option('default_width');
 		$this->default_length = $this->get_option('default_length');
 		$this->default_height = $this->get_option('default_height');
+
+
+
+
+		$this->debug_mode = $this->get_option('debug_mode');
 		
 		
 		
@@ -41,6 +46,8 @@ class WC_Australian_Post_Shipping_Method extends WC_Shipping_Method{
 
 
 		add_action('woocommerce_update_options_shipping_'.$this->id, array($this, 'process_admin_options'));
+
+
 
 
 	}
@@ -110,11 +117,12 @@ class WC_Australian_Post_Shipping_Method extends WC_Shipping_Method{
 							'default'           => '10',
 							'description'       => __( 'cm', 'australian-post' ),
 					),
-					'default_length' => array(
-							'title'             => __( 'Default Package Length', 'australian-post' ),
-							'type'              => 'text',
-							'default'           => '10',
-							'description'       => __( 'cm', 'australian-post' ),
+					'debug_mode' => array(
+						'title' 		=> __( 'Enable Debug Mode', 'woocommerce' ),
+						'type' 			=> 'checkbox',
+						'label' 		=> __( 'Enable ', 'woocommerce' ),
+						'default' 		=> 'no',
+						'description'	=> __('If debug mode is enabled, the shipping method will be activated just for the administrator.'),
 					),
 
 
@@ -139,6 +147,12 @@ class WC_Australian_Post_Shipping_Method extends WC_Shipping_Method{
 
 		?>
 		<h3><?php _e( 'Austrlia Post Settings', 'woocommerce' ); ?></h3>
+			<?php if($this->debug_mode == 'yes'): ?>
+
+				<div class="updated woocommerce-message">
+			    	<p><?php _e( 'Austrlia Post debug mode is activated, only administrators can use it.', 'australian-post' ); ?></p>
+			    </div>
+			<?php endif; ?>
 		<table class="form-table">
 		<?php
 			// Generate the HTML For the settings form.
@@ -162,6 +176,12 @@ class WC_Australian_Post_Shipping_Method extends WC_Shipping_Method{
 	}
 
 	public function is_available( $package ){
+		// Debug mode
+		if($this->debug_mode === 'yes'){
+			return current_user_can('administrator');
+		}
+
+		// The lite version doesn't support international shipping
 		if($package['destination']['country'] != 'AU') return false;
 
 		$weight = 0;
@@ -212,7 +232,12 @@ class WC_Australian_Post_Shipping_Method extends WC_Shipping_Method{
 			$weight =   ((($_product->get_weight() == '')?$this->default_weight:$_product->get_weight())) * $values['quantity'];
 			$height = ( (($_product->height == '')?$this->default_height:$_product->height));
 			$width =  ((($_product->width == '')?$this->default_width:$_product->width));
-			$length =  ((($_product->length == '')?$this->default_length:$_product->length)) * $values['quantity'];
+			$length =  ((($_product->length == '')?$this->default_length:$_product->length));
+			$min_dimension = $this->get_min_dimension( $width, $length, $height );
+			$$min_dimension = $$min_dimension * $values['quantity'];
+
+
+
 			$rates = $this->get_rates($rates, $item_id, $weight, $height, $width, $length, $package['destination']['postcode'] );
 			if(isset($rates['error'])){
 				wc_add_notice($rates['error'],'error');
@@ -274,7 +299,21 @@ class WC_Australian_Post_Shipping_Method extends WC_Shipping_Method{
 	}
 
 
-	
+	/**
+	 * get_min_dimension function.
+	 * get the minimum dimension of the package, so we multiply it with the quantity
+	 * @access private
+	 * @param number $width
+	 * @param number $length
+	 * @param number $height
+	 * @return string $result
+	 */
+	private function get_min_dimension($width, $length, $height){
+
+		$dimensions = array('width'=>$width,'length'=>$length,'height'=>$height);
+		$result = array_keys($dimensions, min($dimensions));
+		return $result[0];
+	}
 
 
 
