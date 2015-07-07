@@ -1,10 +1,10 @@
-=== Australia Post WooCommerce Extension ===
+=== Australian Post WooCommerce Extension ===
 Contributors: waseem_senjer
 Donate link: http://www.waseem-senjer.com
-Tags: woocommerce,shipping, woocommerce extension, australia, australian post
+Tags: woocommerce,shipping, woocommerce extension, australia, australian post,australia post,shipping method
 Requires at least: 3.5.1
-Tested up to: 4.1
-Stable tag: 1.1.3
+Tested up to: 4.2.2
+Stable tag: 1.3.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -51,9 +51,30 @@ This is a key that you must get it from Australian Post so you can use their API
 
 == Changelog ==
 
+= 1.3.5 =
+* Fixing a bug in the dimensions other than 'cm'
 
-= 1.0 =
+
+= 1.3.4 =
+* Fixing some bugs
+* Adding the "Debug" mode
+
+= 1.3.3 =
+* Adding the tax status option
+
+= 1.3.2 = 
+* Fixing the length bug
+
+= 1.3.0 = 
+* Fixing the quantity bug
+* Fixing other minor bugs
+= 1.1.0 =
+* Added default packaging options
+* Performance improvments
+* Fixing some minor bugs
+
+= 1.0.0 =
 * Initial release.
 
 == Upgrade Notice == 
-* Initial release.
+* Debug mode is available now.
